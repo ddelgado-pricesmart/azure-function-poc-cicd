@@ -60,8 +60,7 @@ jobs:
 
       - name: Deploy to Azure Functions
         run: |
-          az functionapp deploy \
+          az functionapp deployment source config-zip \
             --name ${{ env.AZURE_FUNCTIONAPP_NAME }} \
             --resource-group rg-data \
-            --src-path deploy.zip \
-            --type zip
+            --src deploy.zip
