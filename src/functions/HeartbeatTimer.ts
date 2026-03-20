@@ -6,6 +6,6 @@ export async function HeartbeatTimer(_myTimer: Timer, context: InvocationContext
 }
 
 app.timer('HeartbeatTimer', {
-    schedule: '0 */5 * * * *',
+    schedule: '0 */1 * * * *',
     handler: HeartbeatTimer,
 });
