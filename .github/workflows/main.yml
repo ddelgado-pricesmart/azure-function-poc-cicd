@@ -1,0 +1,52 @@
+name: Build and Deploy Azure Function
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: '.'
+  NODE_VERSION: '20'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build TypeScript
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "ERROR: dist/ directory not found. Build may have failed."
+            exit 1
+          fi
+          if [ -z "$(ls -A dist/src/functions 2>/dev/null)" ]; then
+            echo "ERROR: No compiled function files found in dist/src/functions/."
+            exit 1
+          fi
+          echo "Build verification passed."
+
+      - name: Prune dev dependencies
+        run: npm prune --production
+
+      - name: Deploy to Azure Functions
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ vars.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          respect-funcignore: true
