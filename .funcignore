@@ -1,0 +1,8 @@
+.git*
+.vscode
+local.settings.json
+test
+src
+tsconfig.json
+azurite_data
+node_modules
