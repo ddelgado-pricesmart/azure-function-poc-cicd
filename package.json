@@ -1,0 +1,25 @@
+{
+  "name": "azure-function-poc-cicd",
+  "version": "1.0.0",
+  "description": "Azure Functions Node.js v4 TypeScript project",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "prestart": "npm run build",
+    "start": "func start",
+    "clean": "rimraf dist",
+    "emulator": "azurite --silent --location ./azurite_data"
+  },
+  "dependencies": {
+    "@azure/functions": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.0.0"
+  },
+  "main": "dist/src/functions/*.js"
+}
